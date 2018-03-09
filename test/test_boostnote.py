@@ -2,11 +2,10 @@
 
 if __name__ == '__main__':
     from boostnote import Boostnote
-    path = r'C:\Users\Owner\Boostnote'
-    note = Boostnote(path)
-    # print(note)
-    print(note.__repr__())
+    path =[r'C:\Users\masa\Boostnote']
 
-    for storage, note in note.walk_note():
-        print('\t'.join([storage.name, note.title]))
+    bnote = Boostnote(path)
+    for storage, folder, note in bnote.walk_note():
+        print('\t'.join([folder.name, note.title]))
         print(note.__repr__())
+        exit()
