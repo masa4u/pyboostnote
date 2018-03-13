@@ -1,52 +1,64 @@
 # -*- coding: utf-8 -*-
+import os
+import json
+import fnmatch
+
+from boostnote.note import Note
+from boostnote.folder import Folder
 
 
 class Storage(object):
-    def __init__(self, name, key, color):
-        self._name = name
-        self._key = key
-        self._color = color
-        self._notes = []
+    json_file = 'boostnote.json'
 
-    def get_path(self):
-        return self._path
+    def __init__(self, path):
+        # init variables
+        self._folders = {}
 
-    path = property(fget=get_path)
+        if os.path.exists(path):
+            self._path = path
+        else:
+            raise FileNotFoundError(path)
 
-    def get_name(self):
-        return self._name
+        self._setting_file = os.path.join(path, self.json_file)
 
-    name = property(fget=get_name)
+        if os.path.exists(self.setting_file):
+            with open(self.setting_file, 'rb') as fp:
+                self._data = json.load(fp)
 
-    def get_key(self):
-        return self._key
+        for d in self._data['folders']:
+            s = Folder(**d)
+            self.folders[s.key] = s
 
-    key = property(fget=get_key)
+        for root, dirnames, filenames in os.walk(self._path):
+            for filename in fnmatch.filter(filenames, '*.cson'):
+                cson_file = os.path.join(root, filename)
+                with open(cson_file, 'r', encoding='utf-8') as fp:
+                    note = Note().load(fp)
+                    note.filename = filename
+                    self.folders[note.folder].notes.append(note)
 
-    def get_color(self):
-        return self._color
+    def get_setting_file(self) -> str:
+        return self._setting_file
 
-    color = property(fget=get_color)
+    setting_file = property(fget=get_setting_file)
 
-    def get_notes(self) -> list:
-        return self._notes
+    def get_folders(self) -> dict:
+        return self._folders
 
-    notes = property(fget=get_notes)
+    folders = property(fget=get_folders)
 
     def __str__(self):
-        return '<Storage: %s, key=%s, note=%d>' % (self.name, self.key, len(self.notes))
+        return '<%s: %s, Storages=%d>' % (self.__class__.__name__, self.setting_file, len(self.folders))
 
     def __repr__(self):
         rlt = []
         rlt.append(self.__str__())
-        for note in self.notes:
-            rlt.extend(list(map(lambda x: '  ' + x, note.__repr__().split('\n'))))
-
+        prefix_func = lambda x: '+-' if x[0] == '<' else '  '
+        for key, value in self.folders.items():
+            rlt.extend(list(map(lambda x: prefix_func(x.__str__()) + x, value.__repr__().split('\n'))))
         return '\n'.join(rlt)
 
-
-if __name__ == '__main__':
-    path = r'C:\Users\Owner\Boostnote'
-    s = Storage(path)
-
-    print(s)
+    def walk_note(self):
+        for folders in self.folders.values():
+            for note in folders.notes:
+                yield folders, note

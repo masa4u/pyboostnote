@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class Snippet(dict):
     def get_name(self):
         return self['name']
