@@ -34,6 +34,7 @@ class Storage(object):
                 cson_file = os.path.join(root, filename)
                 with open(cson_file, 'r', encoding='utf-8') as fp:
                     note = Note().load(fp)
+                    note.filename = filename
                     self.folders[note.folder].notes.append(note)
 
     def get_setting_file(self) -> str:

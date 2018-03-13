@@ -34,6 +34,7 @@ class Note(object):
                       'tags': [],
                       'isStarred': False,
                       'isTrashed': False}
+        self._filename = ''
 
     @classmethod
     def create_note(self, folder, title, full_path):
@@ -135,6 +136,12 @@ class Note(object):
         return self._data['isTrashed']
 
     isTrashed = property(fget=get_is_trashed)
+
+    def get_filename(self):
+        return self._filename
+    def set_filename(self, _filename):
+        self._filename = _filename
+    filename = property(fget=get_filename, fset=set_filename)
 
     def __str__(self):
         note_info = self.type.summary(self)
