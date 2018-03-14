@@ -25,6 +25,11 @@ class Boostnote(object):
             if note.is_updated is True:
                 note.dump_file(note.filename)
 
+    def find_note(self, func):
+        for storage, folder, note in self.walk_note():
+            if func(note) is True:
+                yield storage, folder, note
+
     def __str__(self):
         return '<%s Storages=%d>' % (self.__class__.__name__, len(self.storages))
 

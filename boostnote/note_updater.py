@@ -76,8 +76,9 @@ class NoteUpdater(object):
 
 
 if __name__ == '__main__':
-    path = [r'e:\fng\boostnote']
-    bnote = Boostnote(path)
+    from boostnote.settings import config
+    print(config.path)
+    bnote = Boostnote(config.path)
     updater = NoteUpdater(bnote, True)
 
     # Headings

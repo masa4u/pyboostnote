@@ -10,6 +10,7 @@ from boostnote.note import Note
 
 class MarkdownStorageType(Enum):
     Gollum = 1
+    Moniwiki = 2
 
 
 class MarkdownStorage(object):
