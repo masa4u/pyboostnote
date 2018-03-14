@@ -35,6 +35,8 @@ class Note(object):
                       'isStarred': False,
                       'isTrashed': False}
         self._filename = ''
+        self._is_updated = True
+        self._uuid = ''
 
     @classmethod
     def create_note(self, folder, title, full_path):
@@ -54,18 +56,36 @@ class Note(object):
 
     def load(self, fin):
         self._data = cson.load(fin)
+        self.is_updated = False
         return self
 
     def loads(self, s):
         self._data = cson.loads(s)
+        self.is_updated = False
         return self
 
-    def dump_file(self, filename):
-        if os.path.exists(filename):
+    def load_file(self, storage, uuid):
+        cson_file = os.path.join(os.path.join(storage._path, 'notes'), '%s.cson' % uuid)
+
+        with open(cson_file, 'r', encoding='utf-8') as fp:
+            self._filename = cson_file
+            self.uuid = uuid
+            return self.load(fp)
+
+    def dump_file(self, filename, existed_check=False):
+        if existed_check and os.path.exists(filename):
             print('already generated file (%s) => (%s) (%s)' % (filename, self.folder, self.title))
             return
         with open(filename, 'w+') as fp:
             cson.dump(self._data, fp)
+
+    def set_is_updated(self, updated: bool):
+        self._is_updated = updated
+
+    def get_is_updated(self) -> bool:
+        return self._is_updated
+
+    is_updated = property(fget=get_is_updated, fset=set_is_updated)
 
     def get_created_at(self):
         return self._data['createdAt']
@@ -92,6 +112,7 @@ class Note(object):
         return self._data['folder']
 
     def set_folder(self, folder):
+        self.is_updated = True
         self._data['folder'] = folder
 
     folder = property(fget=get_folder, fset=set_folder)
@@ -100,6 +121,7 @@ class Note(object):
         return self._data['title']
 
     def set_title(self, title):
+        self.is_updated = True
         self._data['title'] = title
 
     title = property(fget=get_title, fset=set_title)
@@ -113,6 +135,8 @@ class Note(object):
         return self._data['content']
 
     def set_content(self, c):
+        if self._data['content']  != c:
+            self.is_updated = True
         self._data['content'] = c
 
     content = property(fget=get_content, fset=set_content)
@@ -137,16 +161,26 @@ class Note(object):
 
     isTrashed = property(fget=get_is_trashed)
 
+    def get_uuid(self):
+        return self._uuid
+
+    def set_uuid(self, uuid:str):
+        self._uuid = uuid
+    uuid = property(fget=get_uuid, fset=set_uuid)
+
     def get_filename(self):
         return self._filename
+
     def set_filename(self, _filename):
+        self.is_updated = True
         self._filename = _filename
+
     filename = property(fget=get_filename, fset=set_filename)
 
     def __str__(self):
         note_info = self.type.summary(self)
-        return '<%s: %13s folder=%s title=%s, %s>' % (
-            self.__class__.__name__, self.type, self.folder, self.title, note_info)
+        return '<%s: %13s folder=%s title=%s(uuid=%s), %s>' % (
+            self.__class__.__name__, self.type, self.folder, self.title, self.uuid, note_info)
 
     def __repr__(self):
         rlt = []

@@ -2,7 +2,7 @@
 
 if __name__ == '__main__':
     from boostnote import Boostnote
-    path =[r'C:\Users\masa\Boostnote']
+    path =[r'e:\fng\boostnote']
 
     bnote = Boostnote(path)
     for storage, folder, note in bnote.walk_note():

@@ -20,6 +20,11 @@ class Boostnote(object):
                 for note in folder.notes:
                     yield storage, folder, note
 
+    def save_notes(self):
+        for storage, folder, note in self.walk_note():
+            if note.is_updated is True:
+                note.dump_file(note.filename)
+
     def __str__(self):
-        return '<%s>' % (self.__class__.__name__)
+        return '<%s Storages=%d>' % (self.__class__.__name__, len(self.storages))
 

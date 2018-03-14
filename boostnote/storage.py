@@ -13,6 +13,7 @@ class Storage(object):
     def __init__(self, path):
         # init variables
         self._folders = {}
+        self._notes = {}
 
         if os.path.exists(path):
             self._path = path
@@ -31,11 +32,9 @@ class Storage(object):
 
         for root, dirnames, filenames in os.walk(self._path):
             for filename in fnmatch.filter(filenames, '*.cson'):
-                cson_file = os.path.join(root, filename)
-                with open(cson_file, 'r', encoding='utf-8') as fp:
-                    note = Note().load(fp)
-                    note.filename = filename
-                    self.folders[note.folder].notes.append(note)
+                note = Note().load_file(self, filename.split('.')[0])
+                self.folders[note.folder].notes.append(note)
+                self.notes[note.uuid] = note
 
     def get_setting_file(self) -> str:
         return self._setting_file
@@ -46,6 +45,10 @@ class Storage(object):
         return self._folders
 
     folders = property(fget=get_folders)
+
+    def get_notes(self):
+        return self._notes
+    notes = property(fget=get_notes)
 
     def __str__(self):
         return '<%s: %s, Storages=%d>' % (self.__class__.__name__, self.setting_file, len(self.folders))
@@ -62,3 +65,4 @@ class Storage(object):
         for folders in self.folders.values():
             for note in folders.notes:
                 yield folders, note
+
