@@ -1,15 +1,21 @@
 # -*- coding: utf-8 -*-
 
-if __name__ == '__main__':
-    from boostnote.settings import config
-    from boostnote import Boostnote
+import unittest
+from boostnote.settings import config
+from boostnote import Boostnote
 
-    bnote = Boostnote(config.path)
-    for storage, folder, note in bnote.find_note(lambda x: x.title == 'ubuntu'):
-        print(note)
 
-    exit()
-    for storage, folder, note in bnote.walk_note():
-        print('\t'.join([folder.name, note.title]))
-        print(note.__repr__())
-        exit()
+class TestBoostnote(unittest.TestCase):
+    def setUp(self):
+        self.boostnote = Boostnote(config.path)
+
+    def test_find(self):
+        for storage, folder, note in self.boostnote.find_note(lambda x: x.title == 'ubuntu'):
+            pass
+
+    def test_walk_note(self):
+        for storage, folder, note in self.boostnote.walk_note():
+            pass
+
+    def test_repr(self):
+        self.assertEqual(str(self.boostnote).split(' ')[0], '<Boostnote')

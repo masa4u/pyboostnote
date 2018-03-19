@@ -40,7 +40,11 @@ class NoteUpdater(object):
             # print(content)
 
             for from_rep, to_rep in self._note_replace:
+                if note.title == 'GitSVN':
+                    print('%s => ' % from_rep)
                 content = re.sub(from_rep, to_rep, content)
+                if content != note.content:
+                    print('%s note changed(%s)=>(%s)' % (note.title, from_rep, to_rep))
             note.content = content
             if self.verbose is True:
                 old = content.split('\n')
@@ -78,7 +82,7 @@ class NoteUpdater(object):
 if __name__ == '__main__':
     from boostnote.settings import config
     print(config.path)
-    bnote = Boostnote(config.path)
+    bnote = Boostnote([r'C:\TEMP\moniwiki'])
     updater = NoteUpdater(bnote, True)
 
     # Headings
@@ -88,16 +92,21 @@ if __name__ == '__main__':
     updater.add_replace('([=]{3} )(.*?)([ ]+[=]{3})\n', '### \\2\n')
     updater.add_replace('([=]{4} )(.*?)([ ]+[=]{4})\n', '#### \\2\n')
     # special func
-    updater.add_replace('\[\[TableOfContents\]\]', '[[TOC]]')
+    updater.add_replace('\[\[TableOfContents\]\]', '[TOC]')
     # Emphasis
     updater.add_replace("([']{3})(.*?)([']{3})", "**\\2**")
+    updater.add_replace("([']{2})(.*?)([']{2})", "*\\2*")
+    # code
+    special = ''.join(['\\' + x for x in '+-*/= .,;:!?#&$%@|^(){}[]~<>\''])
+    inner_code = '[ ]*[\{]{3}([#!a-z ]*)\n([\w\s가-힣' + special + ']*)[\}]{3}'
+    updater.add_replace(inner_code, '```\\1```\n')
     # Link
     updater.add_replace(
-        '(\[)(http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+) ([a-zA-Z0-9.\+\/]+)(\])',
+        '(\[)(http[s]?://[\w\-./%#가-힣]+) ([a-zA-Z0-9.가-힣 \+\/]+)(\])',
         '[\\3](\\2)')
 
     # updater.do_rename_file()
-    updater.find_inner_link()
-    # updater.do_update()
+    # updater.find_inner_link()
+    updater.do_update()
     # updater.check()
-    # bnote.save_notes()
+    bnote.save_notes()

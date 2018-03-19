@@ -23,7 +23,7 @@ class Storage(object):
         self._setting_file = os.path.join(path, self.json_file)
 
         if os.path.exists(self.setting_file):
-            with open(self.setting_file, 'rb') as fp:
+            with open(self.setting_file, 'r') as fp:
                 self._data = json.load(fp)
 
         for d in self._data['folders']:

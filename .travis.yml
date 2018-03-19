@@ -1,0 +1,29 @@
+language: python
+python:
+  - "3.5"
+  - "3.6"
+
+before_install:
+    - sudo apt-get update -qq
+
+install:
+    - pip install pip --upgrade
+    - pip install pyaml tox tox-travis coveralls
+    - pip install -r requirements.txt
+    - which python
+    - python -V
+    - pip -V
+
+script:
+#    - tox
+    coverage run setup.py test
+
+after_success:
+    - coveralls
+
+notifications:
+    email:
+        recipients:
+           - masa4u@gmail.com
+        on_success: always
+        on_failure: always

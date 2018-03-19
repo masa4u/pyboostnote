@@ -38,21 +38,6 @@ class Note(object):
         self._is_updated = True
         self._uuid = ''
 
-    @classmethod
-    def create_note(self, folder, title, full_path):
-        from boostnote.migration.util import creation_date, update_date
-        note = Note()
-
-        note.folder = folder
-        note.title = title
-        note.createdAt = creation_date(full_path, self.date_format)
-        note.updatedAt = update_date(full_path, self.date_format)
-
-        with open(full_path, 'r', encoding='utf-8') as fp:
-            content = fp.read()
-            note.content = content
-
-        return note
 
     def load(self, fin):
         self._data = cson.load(fin)
@@ -149,7 +134,10 @@ class Note(object):
     def get_tags(self) -> list:
         return self._data['tags']
 
-    tags = property(fget=get_tags)
+    def set_tags(self, tag: list):
+        self._data['tags'] = tag
+
+    tags = property(fget=get_tags, fset=set_tags)
 
     def get_is_starred(self) -> bool:
         return self._data['isStarred']

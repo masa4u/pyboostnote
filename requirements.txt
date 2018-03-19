@@ -1,2 +1,10 @@
-cson
+cson>=0.7
+speg
 tabulate
+requests
+certifi
+speg
+idna
+urllib3
+chardet
+beautifulsoup4
