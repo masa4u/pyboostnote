@@ -8,11 +8,6 @@ from enum import Enum
 from boostnote.note import Note
 
 
-class MarkdownStorageType(Enum):
-    Gollum = 1
-    Moniwiki = 2
-
-
 class MarkdownStorage(object):
     def __init__(self, path):
         if not os.path.exists(path):
