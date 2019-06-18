@@ -28,3 +28,7 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+output/
+
+# boostnote files
+*.ini

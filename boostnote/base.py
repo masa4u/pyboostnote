@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from typing import List
+
 from boostnote.storage import Storage
 
 
@@ -12,7 +14,7 @@ class Boostnote(object):
     def get_storages(self) -> dict:
         return self._storages
 
-    storages = property(fget=get_storages)
+    storages: List[Storage] = property(fget=get_storages)
 
     def walk_note(self):
         for storage in self.storages.values():
@@ -32,4 +34,3 @@ class Boostnote(object):
 
     def __str__(self):
         return '<%s Storages=%d>' % (self.__class__.__name__, len(self.storages))
-

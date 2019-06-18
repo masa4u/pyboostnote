@@ -13,6 +13,10 @@ class ConfigMeta(type):
     def path(cls) -> list:
         return cls.get_boostnote()['path']
 
+    @property
+    def export_path(cls) -> str:
+        return cls.get_boostnote()['export_path']
+
 
 class ConfigSetting(object, metaclass=ConfigMeta):
     config_file = 'boostnote/boostnote.ini'
@@ -57,7 +61,14 @@ class ConfigSetting(object, metaclass=ConfigMeta):
                         rlt['path'].append(path)
                 except Exception as e:
                     break
+
+            rlt['export_path'] = cfg.get('boostnote', 'export_path', fallback=os.path.join(os.path.dirname(__file__), os.path.pardir, 'output'))
+            if not os.path.exists(rlt['export_path']):
+                os.mkdir(rlt['export_path'])
+
             return rlt
         return rlt
+
+
 ConfigSetting.init_config_name()
 config = ConfigSetting

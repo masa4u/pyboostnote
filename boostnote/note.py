@@ -38,7 +38,6 @@ class Note(object):
         self._is_updated = True
         self._uuid = ''
 
-
     def load(self, fin):
         self._data = cson.load(fin)
         self.is_updated = False
@@ -120,7 +119,7 @@ class Note(object):
         return self._data['content']
 
     def set_content(self, c):
-        if self._data['content']  != c:
+        if self._data['content'] != c:
             self.is_updated = True
         self._data['content'] = c
 
@@ -152,8 +151,9 @@ class Note(object):
     def get_uuid(self):
         return self._uuid
 
-    def set_uuid(self, uuid:str):
+    def set_uuid(self, uuid: str):
         self._uuid = uuid
+
     uuid = property(fget=get_uuid, fset=set_uuid)
 
     def get_filename(self):

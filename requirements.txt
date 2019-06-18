@@ -8,3 +8,4 @@ idna
 urllib3
 chardet
 beautifulsoup4
+pyYAML
