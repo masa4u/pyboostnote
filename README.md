@@ -3,12 +3,49 @@
 
 # pyboostnote
 
-boostnote.io python data handler(impoter / expoter)
+boostnote.io python data handler(importer / exporter)
 
- 
+## support migration
+ * moniwiki
+ * gollum
+
+
+
 ## export to normal markdown
 
-using export_to_md.py, you can export boostnote markdown to normalized markdown
-It remove :storage and :note link and add front-meta(pandoc) heaings.
+Using export_to_md.py, you can export BOOSTNOTE markdown to normalized markdown.
+
+It remove ':storage' and ':note' link and add front-meta(PANDOC) headings.
+
+It support below attachment link types,
+ * LinkRelativePath
+ * CopyToMarkdownPath
+ * CopyToMarkdownSubPath
+
+```python
+from boostnote.base import Boostnote
+from boostnote.export_to_md import export_boostnote, AttachPathType
+
+source_path = 'c:/temp/boostnote'
+target_path = 'c:/temp/boostnote_export'
+
+boostnote = Boostnote([source_path])
+storage = boostnote.storages['Default0']
+
+export_boostnote(storage, target_path, AttachPathType.CopyToMarkdownPath)
+
+```
 
 
+
+## Future Updates
+
+### importer
+
+* adding unittest and migration examples
+
+
+
+### exporter
+
+* 
