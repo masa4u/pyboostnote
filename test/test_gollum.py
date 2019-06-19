@@ -1,19 +1,24 @@
 # -*- coding: utf-8 -*-
 import os
+import shutil
 import unittest
+from tempfile import mkdtemp
 
 from boostnote.migration.gollum import MarkdownGollum
-from tempfile import TemporaryDirectory
 
 
 class TestGollum(unittest.TestCase):
     def setUp(self):
-        self.gollum_path = TemporaryDirectory()
-        self.target = TemporaryDirectory()
+        self.gollum_path = mkdtemp()
+        self.target = mkdtemp()
 
-        with open(os.path.join(self.gollum_path.name, 'test.md'), 'w') as fp:
+        with open(os.path.join(self.gollum_path, 'test.md'), 'w') as fp:
             fp.write('## test\nmigration!!')
 
+    def tearDown(self) -> None:
+        shutil.rmtree(self.gollum_path)
+        shutil.rmtree(self.target)
+
     def test_migration(self):
-        md_storage = MarkdownGollum(self.gollum_path.name)
-        md_storage.do_import(self.target.name)
+        md_storage = MarkdownGollum(self.gollum_path)
+        md_storage.do_import(self.target)

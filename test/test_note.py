@@ -11,7 +11,7 @@ class TestNote(unittest.TestCase):
 
     def test_note_creation(self):
         note = Note()
-        self.assertEquals(note.title, '')
+        self.assertEqual(note.title, '')
 
 
 if __name__ == '__main__':

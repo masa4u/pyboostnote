@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-from typing import List
+from typing import List, Union
 
 from boostnote.storage import Storage
 
 
 class Boostnote(object):
-    def __init__(self, paths: list):
+    def __init__(self, paths: Union[List[str], str]):
+        if isinstance(paths, str):
+            paths = [paths]
         self._storages = {}
         name = 'Default'
         for idx, path in enumerate(paths):

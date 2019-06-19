@@ -69,6 +69,5 @@ class ConfigSetting(object, metaclass=ConfigMeta):
             return rlt
         return rlt
 
-
 ConfigSetting.init_config_name()
 config = ConfigSetting

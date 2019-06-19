@@ -14,6 +14,7 @@ class Storage(object):
         # init variables
         self._folders = {}
         self._notes = {}
+        self._data = {}
 
         if os.path.exists(path):
             self._path = path
