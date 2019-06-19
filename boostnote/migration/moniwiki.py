@@ -4,7 +4,7 @@ import re
 import requests
 from urllib.parse import urlparse, unquote, quote, urlsplit
 from urllib import request
-
+from datetime import datetime
 from uuid import uuid4
 from boostnote.migration.wiki import MigrationWiki
 from boostnote.migration.converter import MigrationConverter
@@ -146,7 +146,7 @@ class Moniwiki(MigrationWiki):
     converter = MoniwikiConverter
 
     def __init__(self, wiki_root_url):
-        super().__init__(wiki_root_url)
+        MigrationWiki.__init__(wiki_root_url)
 
         parse_object = urlparse(wiki_root_url)
         root_url = '%s://%s' % (parse_object.scheme, parse_object.netloc)
@@ -195,12 +195,10 @@ class Moniwiki(MigrationWiki):
         return arg['wiki_title'].replace('/', '_')
 
     def get_create_at_from_arg(self, arg: dict) -> str:
-        from boostnote.migration.util import creation_date, update_date
-        return creation_date(r'c:\temp', self.date_format)
+        return datetime.now().strftime(self.date_format)
 
     def get_update_at_from_arg(self, arg: dict) -> str:
-        from boostnote.migration.util import creation_date, update_date
-        return creation_date(r'c:\temp', self.date_format)
+        return datetime.now().strftime(self.date_format)
 
     def get_filename_from_arg(self, arg: dict) -> str:
         return arg['uuid']
@@ -271,8 +269,3 @@ class Moniwiki(MigrationWiki):
             else:
                 contents = contents.replace(rep, '![%s](%s)' % (link['name'], link['full_url']))
         return contents
-
-
-if __name__ == '__main__':
-    wiki = Moniwiki('http://172.21.39.15/moniwiki/')
-    wiki.do_import(r'c:\temp\moniwiki')
