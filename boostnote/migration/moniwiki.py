@@ -146,7 +146,7 @@ class Moniwiki(MigrationWiki):
     converter = MoniwikiConverter
 
     def __init__(self, wiki_root_url):
-        MigrationWiki.__init__(wiki_root_url)
+        MigrationWiki.__init__(self, wiki_root_url)
 
         parse_object = urlparse(wiki_root_url)
         root_url = '%s://%s' % (parse_object.scheme, parse_object.netloc)
