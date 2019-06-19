@@ -38,6 +38,7 @@ class TestExportToMD(unittest.TestCase):
         export_boostnote(storage, self.target_link_relative_path, AttachPathType.LinkRelativePath)
 
         folders = os.listdir(target_path)
+        folders.sort()
         self.assertEqual(['Default', 'ffff'], folders)
 
         default_folder = os.listdir(os.path.join(target_path, 'Default'))
