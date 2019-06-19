@@ -53,7 +53,7 @@ def moniwiki_page_attach(wiki_root: str, wiki_title: str, wiki_text: str):
     pds_base = moniwiki_pds_url(wiki_root, wiki_title)
 
     patterns = [('(\[\[[cC][lL][iI][pP]\()([a-zA-Z0-9]+)(\)\]\])', lambda x: x[1] + '.png'),
-                ('(attachment\:)([a-zA-Z0-9_+\-\.\[\]\@가-힣]+)', lambda x: x[1])]
+                ('(attachment\:)([a-zA-Z0-9_+\-\.\[\]\@가-힣]+.[a-z0-0]+)', lambda x: x[1])]
     for pattern, rep in patterns:
         matchs = re.findall(pattern, wiki_text)
         for idx, match in enumerate(matchs):

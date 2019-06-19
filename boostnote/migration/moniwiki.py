@@ -10,6 +10,7 @@ from boostnote.migration.wiki import MigrationWiki
 from boostnote.migration.converter import MigrationConverter
 from boostnote.migration.moniwiki_util import moniwiki_page_link, moniwiki_page_attach
 from bs4 import BeautifulSoup
+from boostnote.migration.util import is_hangul
 
 
 def download_file(url, dest=None, filename=None):
@@ -135,8 +136,9 @@ def empty_or_notfound(wiki_text: str):
 
 def get_wiki_text_from_url(url: str) -> str:
     wiki_data = requests.get(url)
-    wiki_text = wiki_data.text.encode(wiki_data.encoding).decode('utf-8')
-
+    # if wiki_data.encoding != 'utf-8':
+    #     wiki_text = wiki_data.text.encode(wiki_data.encoding).decode('utf-8')
+    wiki_text = wiki_data.text
     return wiki_text
 
 
@@ -246,18 +248,26 @@ class Moniwiki(MigrationWiki):
             contents = contents.replace('[%s]' % rep, '[%s](:note:%s)' % (rep, link))
 
         download = True
-        image_path = os.path.join(self.target_folder, 'images')
+        if not os.path.exists(os.path.join(self.target_folder, 'attachments')):
+            os.mkdir(os.path.join(self.target_folder, 'attachments'))
+        image_path = os.path.join(self.target_folder, 'attachments', args['uuid'])
+        if len(source['images'].keys()) > 0 and not os.path.exists(image_path):
+            os.mkdir(image_path)
+
         for rep, link in source['images'].items():
             if download and self.wiki_root_url in link['full_url']:
                 filename = link['name']
+                if is_hangul(filename):
+                    filename = '.'.join([str(uuid4()), filename.split('.')[-1]])
                 orgname = '.'.join(filename.split('.')[:-1])
+
                 ext = filename.split('.')[-1]
                 idx = 0
                 while os.path.exists(os.path.join(image_path, filename)):
                     filename = '%s_%d.%s' % (orgname, idx, ext)
                     idx = idx + 1
                 download_file(link['full_url'], image_path, filename)
-                contents = contents.replace(rep, '![%s](\\:storages\\%s)' % (link['name'], filename))
+                contents = contents.replace(rep, '![%s](\:storage/%s)' % (link['name'], filename))
             else:
                 contents = contents.replace(rep, '![%s](%s)' % (link['name'], link['full_url']))
         return contents
@@ -266,24 +276,3 @@ class Moniwiki(MigrationWiki):
 if __name__ == '__main__':
     wiki = Moniwiki('http://172.21.39.15/moniwiki/')
     wiki.do_import(r'c:\temp\moniwiki')
-    exit()
-
-    conveter = MoniwikiConverter
-
-
-    def get_code(url):
-        res = requests.get(url)
-        return res.text.encode(res.encoding).decode('utf-8')
-
-
-    code = '\n'.join(
-        get_code('http://172.21.39.15/moniwiki/wiki.php/PriceItFrontArena/Linking/ATLComDLL?action=raw').split('\n')[
-        :160])
-
-    split_processor(code)
-    exit()
-
-    # o = wiki.sources['CodingStandard/c']['contents'][-1000:-500]
-    n = conveter.convert_contents(code, ['code-block'])
-    # report_changes(o, n)
-    print(n)

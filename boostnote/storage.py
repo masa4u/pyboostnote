@@ -26,6 +26,10 @@ class Storage(object):
         if os.path.exists(self.setting_file):
             with open(self.setting_file, 'rb') as fp:
                 self._data = json.load(fp)
+        else:
+            with open(self.setting_file, 'wb') as fp:
+                self._data = {'folders': [], 'version': '1.0'}
+                json.dump(self._data, fp)
 
         for d in self._data['folders']:
             s = Folder(**d)
@@ -49,6 +53,7 @@ class Storage(object):
 
     def get_notes(self):
         return self._notes
+
     notes = property(fget=get_notes)
 
     def __str__(self):
@@ -66,4 +71,3 @@ class Storage(object):
         for folders in self.folders.values():
             for note in folders.notes:
                 yield folders, note
-

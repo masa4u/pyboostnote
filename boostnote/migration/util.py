@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import platform
+import re
 
 from datetime import datetime
 
@@ -24,3 +25,8 @@ def creation_date(path_to_file: str, format: str):
 
 def update_date(path_to_file: str, format: str):
     return time_convert(os.path.getmtime(path_to_file), format)
+
+
+def is_hangul(text):
+    hanguul_re = re.compile(r'[ㄱ-ㅣ가-힣]')
+    return hanguul_re.search(text) is not None
