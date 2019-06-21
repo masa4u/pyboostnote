@@ -2,6 +2,7 @@
 from typing import List, Union
 
 from boostnote.storage import Storage
+from boostnote.note import NoteType
 
 
 class Boostnote(object):
@@ -22,6 +23,8 @@ class Boostnote(object):
         for storage in self.storages.values():
             for key, folder in storage.folders.items():
                 for note in folder.notes:
+                    if note.type == NoteType.SNIPPET_NOTE:
+                        continue
                     yield storage, folder, note
 
     def save_notes(self):

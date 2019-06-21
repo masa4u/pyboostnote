@@ -117,6 +117,8 @@ class Note(object):
     description = property(fget=get_description)
 
     def get_content(self):
+        if self.type == NoteType.SNIPPET_NOTE:
+            return ''
         return self._data['content']
 
     def set_content(self, c):

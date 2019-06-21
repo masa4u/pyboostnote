@@ -2,6 +2,7 @@
 import re
 
 from boostnote import Boostnote
+from boostnote.note import NoteType
 
 
 class NoteUpdater(object):
@@ -38,11 +39,8 @@ class NoteUpdater(object):
     def do_update(self):
         for storage, folder, note in self.boostnote.walk_note():
             content = note.content
-            # print(content)
 
             for from_rep, to_rep in self._note_replace:
-                if note.title == 'GitSVN':
-                    print('%s => ' % from_rep)
                 content = re.sub(from_rep, to_rep, content)
                 if content != note.content:
                     print('%s note changed(%s)=>(%s)' % (note.title, from_rep, to_rep))
@@ -70,6 +68,8 @@ class NoteUpdater(object):
     def find_inner_link(self):
         link_pattern = '\[([\w ]+)\]\(\:note\:([\w]+)\)'
         for storage, folder, note in self.boostnote.walk_note():
+            if note.type == NoteType.SNIPPET_NOTE:
+                continue
             matchs = re.findall(link_pattern, note.content)
             if len(matchs) > 0:
                 for idx, (link_name, cson) in enumerate(matchs):

@@ -19,6 +19,7 @@ def extract_file(path):
 class TestNoteUpdater(unittest.TestCase):
     def setUp(self):
         self.source_path = mkdtemp()
+        extract_file(self.source_path)
 
     def tearDown(self) -> None:
         shutil.rmtree(self.source_path)
@@ -27,26 +28,12 @@ class TestNoteUpdater(unittest.TestCase):
         bnote = Boostnote([self.source_path])
         updater = NoteUpdater(bnote, True)
 
-        # Headings
-        updater.add_replace('([#]+ )(.*?)([ ]+[#]+)\n', '\\1\\2\n')
-        updater.add_replace('(= )(.*?)([ ]+=)\n', '# \\2\n')
-        updater.add_replace('([=]{2} )(.*?)([ ]+[=]{2})\n', '## \\2\n')
-        updater.add_replace('([=]{3} )(.*?)([ ]+[=]{3})\n', '### \\2\n')
-        updater.add_replace('([=]{4} )(.*?)([ ]+[=]{4})\n', '#### \\2\n')
-        # special func
-        updater.add_replace(r'\[\[TableOfContents\]\]', '[TOC]')
-        # Emphasis
-        updater.add_replace("([']{3})(.*?)([']{3})", "**\\2**")
-        updater.add_replace("([']{2})(.*?)([']{2})", "*\\2*")
-        # code
-        special = ''.join(['\\' + x for x in '+-*/= .,;:!?#&$%@|^(){}[]~<>\''])
-        inner_code = r'[ ]*[{]{3}([#!a-z ]*)\n([\w가-힣' + special + ']*)[}]{3}'
-        updater.add_replace(inner_code, '```\\1```\n')
-        # Link
-        updater.add_replace(
-            r'(\[)(http[s]?://[\w\-./%#가-힣]+) ([a-zA-Z0-9.가-힣 \+\/]+)(\])',
-            '[\\3](\\2)')
+        updater.add_replace(r'\(:storage[\\|/]([a-z0-9\-]+)[\\|/]([\w\.]+)\)', '\\1\\2\n')
 
         updater.do_rename_file()
         updater.find_inner_link()
         updater.do_update()
+
+
+if __name__ == '__main__':
+    unittest.main()
