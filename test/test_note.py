@@ -13,6 +13,4 @@ class TestNote(unittest.TestCase):
         note = Note()
         self.assertEqual(note.title, '')
 
-
-if __name__ == '__main__':
-    unittest.main()
+        self.assertTrue(repr(note).startswith('<Note:'))

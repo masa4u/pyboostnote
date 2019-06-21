@@ -17,3 +17,8 @@ class TestSnippet(unittest.TestCase):
         s['content'] = 'fdsafdsa'
 
         ss = Snippets()
+
+        self.assertTrue(s.name, s['name'])
+        self.assertTrue(s.mode, s['mode'])
+        self.assertTrue(s.content, s['content'])
+        
