@@ -7,6 +7,7 @@ class Folder(object):
         self._key = key
         self._color = color
         self._notes = []
+        self._path = ''
 
     def get_path(self):
         return self._path
@@ -34,7 +35,7 @@ class Folder(object):
     notes = property(fget=get_notes)
 
     def __str__(self):
-        return '<Storage: %s, key=%s, note=%d>' % (self.name, self.key, len(self.notes))
+        return '<Folder: %s, key=%s, note=%d>' % (self.name, self.key, len(self.notes))
 
     def __repr__(self):
         rlt = []

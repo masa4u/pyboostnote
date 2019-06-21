@@ -34,6 +34,8 @@ class TestNoteUpdater(unittest.TestCase):
         updater.find_inner_link()
         updater.do_update()
 
+        updater.check()
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -44,7 +44,7 @@ class NoteUpdater(object):
             for from_rep, to_rep in self._note_replace:
                 content = re.sub(from_rep, to_rep, content)
                 if content != note.content:
-                    logger.info('%s note changed(%s)=>(%s)' % (note.title, from_rep, to_rep))
+                    logger.info('%s note changed(%s)=>(%s)' % (note.title, from_rep, to_rep.strip()))
             note.content = content
             if self.verbose is True:
                 old = content.split('\n')
@@ -62,12 +62,12 @@ class NoteUpdater(object):
                                'path': storage._path
                                })
             named_dict.update(note._data)
-            logger.info(note.filename)
+            logger.info(f'old={note.filename}')
             note.filename = name_pattern.format(**named_dict)
-            logger.info(note.filename)
+            logger.info(f'new={note.filename}')
 
     def find_inner_link(self):
-        link_pattern = '\[([\w ]+)\]\(\:note\:([\w]+)\)'
+        link_pattern = '\[([\w ]+)[\]|\/]\(\:note\:([\w]+)\)'
         for storage, folder, note in self.boostnote.walk_note():
             if note.type == NoteType.SNIPPET_NOTE:
                 continue

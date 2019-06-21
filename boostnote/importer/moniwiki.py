@@ -58,33 +58,33 @@ def skip_page(title_name):
     return False
 
 
-def report_changes(o: str, n: str):
-    logger.info('-old-')
-    logger.info(o)
-    logger.info('-new-')
-    logger.info(n)
+# def report_changes(o: str, n: str):
+#     logger.info('-old-')
+#     logger.info(o)
+#     logger.info('-new-')
+#     logger.info(n)
 
 
-def split_processor(_code: str):
-    rlt = []
-    block_start = '[\s]*[\{]{3}'
-    block_end = '[\}]{3}'
-    new_line = []
-    in_block = False
-    for row in _code.split('\n'):
-        if in_block is False and re.match(block_start, row):
-            rlt.append(['inline', '\n'.join(new_line)])
-            new_line = [row]
-            in_block = True
-        elif in_block and re.match(block_end, row):
-            new_line.append(row)
-            rlt.append(['block', '\n'.join(new_line)])
-            new_line = []
-            in_block = False
-        else:
-            new_line.append(row)
-    rlt.append(['inline', '\n'.join(new_line)])
-    return rlt
+# def split_processor(_code: str):
+#     rlt = []
+#     block_start = '[\s]*[\{]{3}'
+#     block_end = '[\}]{3}'
+#     new_line = []
+#     in_block = False
+#     for row in _code.split('\n'):
+#         if in_block is False and re.match(block_start, row):
+#             rlt.append(['inline', '\n'.join(new_line)])
+#             new_line = [row]
+#             in_block = True
+#         elif in_block and re.match(block_end, row):
+#             new_line.append(row)
+#             rlt.append(['block', '\n'.join(new_line)])
+#             new_line = []
+#             in_block = False
+#         else:
+#             new_line.append(row)
+#     rlt.append(['inline', '\n'.join(new_line)])
+#     return rlt
 
 
 class MoniwikiConverter(BaseConveter):
