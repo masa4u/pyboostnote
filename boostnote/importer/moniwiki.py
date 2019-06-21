@@ -13,7 +13,7 @@ from boostnote.importer.converter import BaseConveter
 from boostnote.importer.moniwiki_util import moniwiki_page_link, moniwiki_page_attach
 from boostnote.importer.util import is_hangul
 from boostnote.importer.wiki import WikiImpoter
-from boostnote.settings import logger
+from boostnote.settings import loggert add
 
 
 def download_file(url, dest=None, filename=None):
@@ -48,7 +48,6 @@ def download_file(url, dest=None, filename=None):
                 status += "   [{0:6.2f}%]".format(file_size_dl * 100 / file_size)
             status += chr(13)
             logger.info(status)
-        logger.info()
     return filename
 
 
