@@ -13,7 +13,7 @@ from boostnote.importer.converter import BaseConveter
 from boostnote.importer.moniwiki_util import moniwiki_page_link, moniwiki_page_attach
 from boostnote.importer.util import is_hangul
 from boostnote.importer.wiki import WikiImpoter
-from boostnote.settings import loggert add
+from boostnote.settings import logger
 
 
 def download_file(url, dest=None, filename=None):
