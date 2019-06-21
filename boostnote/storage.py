@@ -27,9 +27,7 @@ class Storage(object):
             with open(self.setting_file, 'rb') as fp:
                 self._data = json.load(fp)
         else:
-            with open(self.setting_file, 'wb') as fp:
-                self._data = {'folders': [], 'version': '1.0'}
-                json.dump(self._data, fp)
+            self._data = {'folders': [], 'version': '1.0'}
 
         for d in self._data['folders']:
             s = Folder(**d)

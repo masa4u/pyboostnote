@@ -34,17 +34,17 @@ class TestNoteUpdater(unittest.TestCase):
         updater.add_replace('([=]{3} )(.*?)([ ]+[=]{3})\n', '### \\2\n')
         updater.add_replace('([=]{4} )(.*?)([ ]+[=]{4})\n', '#### \\2\n')
         # special func
-        updater.add_replace('\[\[TableOfContents\]\]', '[TOC]')
+        updater.add_replace(r'\[\[TableOfContents\]\]', '[TOC]')
         # Emphasis
         updater.add_replace("([']{3})(.*?)([']{3})", "**\\2**")
         updater.add_replace("([']{2})(.*?)([']{2})", "*\\2*")
         # code
         special = ''.join(['\\' + x for x in '+-*/= .,;:!?#&$%@|^(){}[]~<>\''])
-        inner_code = '[ ]*[\{]{3}([#!a-z ]*)\n([\w\s가-힣' + special + ']*)[\}]{3}'
+        inner_code = r'[ ]*[{]{3}([#!a-z ]*)\n([\w가-힣' + special + ']*)[}]{3}'
         updater.add_replace(inner_code, '```\\1```\n')
         # Link
         updater.add_replace(
-            '(\[)(http[s]?://[\w\-./%#가-힣]+) ([a-zA-Z0-9.가-힣 \+\/]+)(\])',
+            r'(\[)(http[s]?://[\w\-./%#가-힣]+) ([a-zA-Z0-9.가-힣 \+\/]+)(\])',
             '[\\3](\\2)')
 
         updater.do_rename_file()

@@ -33,3 +33,4 @@ output/
 # boostnote files
 *.ini
 work/
+.coverage
