@@ -63,18 +63,3 @@ def moniwiki_page_attach(wiki_root: str, wiki_title: str, wiki_text: str):
                 yield idx, ''.join(match), rep(match), full_url
             else:
                 logger.info('not found: %s' % full_url)
-
-
-if __name__ == '__main__':
-    wiki_text = '''
-    [[Clip(menu)]]
-[[Clip(search)]]
-
-'IVSDAX_DW', 'IVSRU_DW', 'IVSHSI_DW', 'IVSXIN9I_DW', 'IVSAS51_DW');
-   (2016개 있어야 한다)
-attachment:그림2.jpg
-fdsa 
-    '''
-    matchs = moniwiki_page_attach('http://172.21.39.15/moniwiki/', 'Daily업무/OptPremium', wiki_text)
-    for idx, match, full_url in matchs:
-        logger.info(idx, match, full_url)
