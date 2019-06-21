@@ -4,7 +4,7 @@ import shutil
 import unittest
 from tempfile import mkdtemp
 
-from boostnote.migration.moniwiki import Moniwiki
+from boostnote.importer.moniwiki import Moniwiki
 
 
 class TestMoniwiki(unittest.TestCase):

@@ -2,7 +2,6 @@
 import codecs
 import os
 import re
-from enum import Enum
 from shutil import copy2
 
 try:
@@ -13,6 +12,7 @@ import yaml
 
 from boostnote.base import Boostnote, Storage
 from boostnote.note import NoteType, Note
+from boostnote.exporter.exporting_rules import AttachPathType
 
 YAML_START = '---\n'
 YAML_END = '\n---\n'
@@ -36,11 +36,6 @@ def default_representer(dumper, data):
 
 Dumper.add_representer(dict, default_representer)
 
-
-class AttachPathType(Enum):
-    LinkRelativePath = 0
-    CopyToMarkdownPath = 1
-    CopyToMarkdownSubPath = 2
 
 
 def normalize_filename(org) -> str:
@@ -182,24 +177,4 @@ def export_boostnote(storage: Storage, export_to_path: str, export_attach_method
         to_normal_md(storage, note, export_to_path, export_attach_method)
 
 
-if __name__ == '__main__':
-    from boostnote.settings import config
-    import pickle
 
-    boost_pickle = os.path.join(config.export_path, 'boost.pickle')
-
-    if os.path.exists(boost_pickle):
-        with open(boost_pickle, 'rb') as fp:
-            boostnote = pickle.load(fp)
-    else:
-        boostnote = Boostnote(config.path)
-        with open(boost_pickle, 'wb') as fp:
-            pickle.dump(boostnote, fp)
-
-    storage = boostnote.storages['Default0']
-    if True:
-        export_boostnote(storage, config.export_path, AttachPathType.LinkRelativePath)
-    else:
-        uuid = 'b072e8f5-e56a-4943-95a0-11aac8dfbf7e'
-        for _, folder, note in boostnote.find_note(lambda x: x.uuid == uuid):
-            to_normal_md(storage, note, config.export_path, ExportAttachmentPathType.LinkRelativePath)

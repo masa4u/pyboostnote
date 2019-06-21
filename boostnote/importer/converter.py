@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-class MigrationConverter(object):
+class BaseConveter(object):
     verbose = False
     def __init__(self, _migration_base):
         self.base = _migration_base

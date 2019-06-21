@@ -5,11 +5,9 @@
 
 boostnote.io python data handler(importer / exporter)
 
-## support migration
+## support impoters
  * moniwiki
  * gollum
-
-
 
 ## export to normal markdown
 
@@ -24,7 +22,8 @@ It support below attachment link types,
 
 ```python
 from boostnote.base import Boostnote
-from boostnote.export_to_md import export_boostnote, AttachPathType
+from boostnote.exporter.markdown import export_boostnote
+from boostnote.exporter.exporting_rules import AttachPathType
 
 source_path = 'c:/temp/boostnote'
 target_path = 'c:/temp/boostnote_export'
@@ -33,10 +32,7 @@ boostnote = Boostnote([source_path])
 storage = boostnote.storages['Default0']
 
 export_boostnote(storage, target_path, AttachPathType.CopyToMarkdownPath)
-
 ```
-
-
 
 ## Future Updates
 
@@ -44,8 +40,5 @@ export_boostnote(storage, target_path, AttachPathType.CopyToMarkdownPath)
 
 * adding unittest and migration examples
 
-
-
 ### exporter
-
-* 
+ * 

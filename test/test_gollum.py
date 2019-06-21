@@ -4,7 +4,7 @@ import shutil
 import unittest
 from tempfile import mkdtemp
 
-from boostnote.migration.gollum import MarkdownGollum
+from boostnote.importer.gollum import MarkdownGollum
 
 
 class TestGollum(unittest.TestCase):

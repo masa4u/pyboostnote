@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import os
-import json
 import fnmatch
+import json
+import os
 
-from boostnote.note import Note
 from boostnote.folder import Folder
+from boostnote.note import Note
 
 
 class Storage(object):

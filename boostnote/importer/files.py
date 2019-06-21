@@ -4,15 +4,15 @@ import fnmatch
 
 from uuid import uuid4
 
-from boostnote.migration.migration_base import MigrationBase
-from boostnote.migration.util import creation_date, update_date
+from boostnote.importer.base_impoter import BaseImpoter
+from boostnote.importer.util import creation_date, update_date
 from boostnote.note import Note
 
 
-class MigrationFiles(MigrationBase):
+class FilesImpoter(BaseImpoter):
 
     def __init__(self, path):
-        MigrationBase.__init__(self)
+        BaseImpoter.__init__(self)
         if not os.path.exists(path):
             raise FileNotFoundError(path)
         self._path = path

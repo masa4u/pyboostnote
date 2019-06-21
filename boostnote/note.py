@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-import cson
 from enum import Enum
+
+import cson
 from tabulate import tabulate
 
 
@@ -175,7 +176,3 @@ class Note(object):
         rlt.append(self.__str__())
         rlt.extend(tabulate(self._data.items(), headers=('key', 'value'), tablefmt='orgtbl').split('\n'))
         return '\n'.join(rlt)
-
-
-if __name__ == '__main__':
-    folder = r'C:\Users\Owner\Boostnote\notes\63a94ae29718dd240436.cson'

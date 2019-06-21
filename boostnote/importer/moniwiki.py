@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 import os
 import re
-import requests
-from urllib.parse import urlparse, unquote, quote, urlsplit
-from urllib import request
 from datetime import datetime
+from urllib import request
+from urllib.parse import urlparse, unquote, quote
 from uuid import uuid4
-from boostnote.migration.wiki import MigrationWiki
-from boostnote.migration.converter import MigrationConverter
-from boostnote.migration.moniwiki_util import moniwiki_page_link, moniwiki_page_attach
+
+import requests
 from bs4 import BeautifulSoup
-from boostnote.migration.util import is_hangul
+
+from boostnote.importer.converter import BaseConveter
+from boostnote.importer.moniwiki_util import moniwiki_page_link, moniwiki_page_attach
+from boostnote.importer.util import is_hangul
+from boostnote.importer.wiki import WikiImpoter
 
 
 def download_file(url, dest=None, filename=None):
@@ -85,7 +87,7 @@ def split_processor(_code: str):
     return rlt
 
 
-class MoniwikiConverter(MigrationConverter):
+class MoniwikiConverter(BaseConveter):
     special = ''.join(['\\' + x for x in '+-*/=_ .,;:!?#&$%@|^(){}[]~<>\'"\\'])
     note_replace = [
         # Headings
@@ -142,11 +144,11 @@ def get_wiki_text_from_url(url: str) -> str:
     return wiki_text
 
 
-class Moniwiki(MigrationWiki):
+class Moniwiki(WikiImpoter):
     converter = MoniwikiConverter
 
     def __init__(self, wiki_root_url):
-        MigrationWiki.__init__(self, wiki_root_url)
+        WikiImpoter.__init__(self, wiki_root_url)
 
         parse_object = urlparse(wiki_root_url)
         root_url = '%s://%s' % (parse_object.scheme, parse_object.netloc)

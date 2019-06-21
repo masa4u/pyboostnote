@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from boostnote import Boostnote
 import re
+
+from boostnote import Boostnote
 
 
 class NoteUpdater(object):
@@ -76,37 +77,3 @@ class NoteUpdater(object):
                         print('%02d : %s ==> %s' % (idx, cson, storage.notes[cson]))
                     else:
                         print('%02d : %s ==> broken link' % (idx, cson))
-
-
-
-if __name__ == '__main__':
-    from boostnote.settings import config
-    print(config.path)
-    bnote = Boostnote([r'C:\TEMP\moniwiki'])
-    updater = NoteUpdater(bnote, True)
-
-    # Headings
-    updater.add_replace('([#]+ )(.*?)([ ]+[#]+)\n', '\\1\\2\n')
-    updater.add_replace('(= )(.*?)([ ]+=)\n', '# \\2\n')
-    updater.add_replace('([=]{2} )(.*?)([ ]+[=]{2})\n', '## \\2\n')
-    updater.add_replace('([=]{3} )(.*?)([ ]+[=]{3})\n', '### \\2\n')
-    updater.add_replace('([=]{4} )(.*?)([ ]+[=]{4})\n', '#### \\2\n')
-    # special func
-    updater.add_replace('\[\[TableOfContents\]\]', '[TOC]')
-    # Emphasis
-    updater.add_replace("([']{3})(.*?)([']{3})", "**\\2**")
-    updater.add_replace("([']{2})(.*?)([']{2})", "*\\2*")
-    # code
-    special = ''.join(['\\' + x for x in '+-*/= .,;:!?#&$%@|^(){}[]~<>\''])
-    inner_code = '[ ]*[\{]{3}([#!a-z ]*)\n([\w\s가-힣' + special + ']*)[\}]{3}'
-    updater.add_replace(inner_code, '```\\1```\n')
-    # Link
-    updater.add_replace(
-        '(\[)(http[s]?://[\w\-./%#가-힣]+) ([a-zA-Z0-9.가-힣 \+\/]+)(\])',
-        '[\\3](\\2)')
-
-    # updater.do_rename_file()
-    # updater.find_inner_link()
-    updater.do_update()
-    # updater.check()
-    bnote.save_notes()

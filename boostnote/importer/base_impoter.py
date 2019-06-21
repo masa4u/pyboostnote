@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
 import json
-from uuid import uuid4
 from boostnote.note import Note
 
 
-class MigrationBase(object):
+class BaseImpoter(object):
     date_format = '%Y-%m-%dT%H:%M:%S.%fZ'
     converter = None
 

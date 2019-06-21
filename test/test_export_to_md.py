@@ -4,7 +4,7 @@ import os
 from tempfile import mkdtemp
 
 from boostnote.base import Boostnote
-from boostnote.export_to_md import export_boostnote, AttachPathType
+from boostnote.exporter.markdown import export_boostnote, AttachPathType
 import tarfile
 
 

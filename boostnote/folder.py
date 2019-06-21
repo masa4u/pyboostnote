@@ -43,10 +43,3 @@ class Folder(object):
             rlt.extend(list(map(lambda x: '  ' + x, note.__repr__().split('\n'))))
 
         return '\n'.join(rlt)
-
-
-if __name__ == '__main__':
-    path = r'C:\Users\Owner\Boostnote'
-    s = Folder(path)
-
-    print(s)
