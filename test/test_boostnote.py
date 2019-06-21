@@ -28,13 +28,13 @@ class TestBoostnote(unittest.TestCase):
         notes = []
         for storage, folder, note in self.boostnote.find_note(lambda x: x.title != 'ubuntu'):
             notes.append(note)
-        self.assertEqual(len(notes), 4, "check note size")
+        self.assertEqual(len(notes), 3, "check note size")
 
     def test_walk_note(self):
         notes = []
         for storage, folder, note in self.boostnote.walk_note():
             notes.append(note)
-        self.assertEqual(len(notes), 4, "check note size")
+        self.assertEqual(len(notes), 3, "check note size")
 
     def test_repr(self):
         self.assertEqual(str(self.boostnote).split(' ')[0], '<Boostnote')
