@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/masa4u/pyboostnote.svg?branch=master)](https://travis-ci.org/masa4u/pyboostnote)
-[![Coverage Status](https://coveralls.io/repos/github/masa4u/pyboostnote/badge.svg?branch=master)](https://coveralls.io/github/masa4u/pyboostnote?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/masa4u/pyboostnote/badge.png?branch=master)](https://coveralls.io/github/masa4u/pyboostnote?branch=master)
 
 # pyboostnote
 
