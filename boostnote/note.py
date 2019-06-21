@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from enum import Enum
+from boostnote.settings import logger
 
 import cson
 from tabulate import tabulate
@@ -59,7 +60,7 @@ class Note(object):
 
     def dump_file(self, filename, existed_check=False):
         if existed_check and os.path.exists(filename):
-            print('already generated file (%s) => (%s) (%s)' % (filename, self.folder, self.title))
+            logger.info('already generated file (%s) => (%s) (%s)' % (filename, self.folder, self.title))
             return
         with open(filename, 'w+') as fp:
             cson.dump(self._data, fp)

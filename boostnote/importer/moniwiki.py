@@ -13,6 +13,7 @@ from boostnote.importer.converter import BaseConveter
 from boostnote.importer.moniwiki_util import moniwiki_page_link, moniwiki_page_attach
 from boostnote.importer.util import is_hangul
 from boostnote.importer.wiki import WikiImpoter
+from boostnote.settings import logger
 
 
 def download_file(url, dest=None, filename=None):
@@ -30,7 +31,7 @@ def download_file(url, dest=None, filename=None):
         file_size = None
         if meta_length:
             file_size = int(meta_length[0])
-        print('Downloading: {0} Bytes: {1}'.format(url, file_size))
+        logger.info('Downloading: {0} Bytes: {1}'.format(url, file_size))
 
         file_size_dl = 0
         block_sz = 8192
@@ -46,8 +47,8 @@ def download_file(url, dest=None, filename=None):
             if file_size:
                 status += "   [{0:6.2f}%]".format(file_size_dl * 100 / file_size)
             status += chr(13)
-            print(status, end="")
-        print()
+            logger.info(status, end="")
+        logger.info()
     return filename
 
 
@@ -59,10 +60,10 @@ def skip_page(title_name):
 
 
 def report_changes(o: str, n: str):
-    print('-old-')
-    print(o)
-    print('-new-')
-    print(n)
+    logger.info('-old-')
+    logger.info(o)
+    logger.info('-new-')
+    logger.info(n)
 
 
 def split_processor(_code: str):
@@ -126,7 +127,7 @@ class MoniwikiConverter(BaseConveter):
                     matchs = re.findall(from_rep, old_contents)
                     if len(matchs) > 0:
                         for match in matchs:
-                            print(match)
+                            logger.info(match)
                 old_contents = re.sub(from_rep, to_rep, old_contents, re.UNICODE)
 
         return old_contents
@@ -166,7 +167,7 @@ class Moniwiki(WikiImpoter):
             wiki_root_url = full_url % quote(wiki_title) + '?action=raw'
             wiki_text = get_wiki_text_from_url(wiki_root_url)
             if empty_or_notfound(wiki_text):
-                print('wiki_url is empty(%s)' % wiki_root_url)
+                logger.info('wiki_url is empty(%s)' % wiki_root_url)
                 continue
 
             self.append_source(wiki_title, {
@@ -182,7 +183,7 @@ class Moniwiki(WikiImpoter):
         self.init_source()
         for key, value in self.sources.items():
             self.init_wiki(value)
-        print('%d files loaded' % no)
+        logger.info('%d files loaded' % no)
 
     def get_folder_from_arg(self, arg: dict) -> str:
         spilt_title = arg['wiki_title'].split('/')
@@ -235,7 +236,7 @@ class Moniwiki(WikiImpoter):
 
             if full_link in self.sources:
                 source['links'][link_name] = self.sources[full_link]['uuid']
-                # print('%d %s => %s(%s)' % (idx, wiki_title, link_name, self.sources[full_link]['uuid']))
+                # logger.info('%d %s => %s(%s)' % (idx, wiki_title, link_name, self.sources[full_link]['uuid']))
 
         # init moniwiki attach
         for idx, match_str, image_name, full_url in moniwiki_page_attach(self.wiki_root_url, wiki_title, wiki_page):

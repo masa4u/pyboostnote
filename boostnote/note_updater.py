@@ -3,6 +3,7 @@ import re
 
 from boostnote import Boostnote
 from boostnote.note import NoteType
+from boostnote.settings import logger
 
 
 class NoteUpdater(object):
@@ -30,11 +31,11 @@ class NoteUpdater(object):
             for from_rep, to_rep in self._note_replace:
                 matchs = re.findall(from_rep, note.content)  # , re.DOTALL)
                 if self.verbose and len(matchs) > 0:
-                    print('\n<storage=%s folder=%s note=%s(%s)>' % (
+                    logger.info('\n<storage=%s folder=%s note=%s(%s)>' % (
                         storage._path, folder.name, note.title, note.uuid))
-                    print('=> %s ... %d matchs found' % (from_rep.replace('\n', '\\n'), len(matchs)))
+                    logger.info('=> %s ... %d matchs found' % (from_rep.replace('\n', '\\n'), len(matchs)))
                     for idx, match in enumerate(matchs):
-                        print('%02d : %s' % (idx, match))
+                        logger.info('%02d : %s' % (idx, match))
 
     def do_update(self):
         for storage, folder, note in self.boostnote.walk_note():
@@ -43,14 +44,14 @@ class NoteUpdater(object):
             for from_rep, to_rep in self._note_replace:
                 content = re.sub(from_rep, to_rep, content)
                 if content != note.content:
-                    print('%s note changed(%s)=>(%s)' % (note.title, from_rep, to_rep))
+                    logger.info('%s note changed(%s)=>(%s)' % (note.title, from_rep, to_rep))
             note.content = content
             if self.verbose is True:
                 old = content.split('\n')
                 for old_line, new_line in zip(old, content.split('\n')):
                     if (old_line != new_line):
-                        print('  ' + old_line)
-                        print('=>' + new_line)
+                        logger.info('  ' + old_line)
+                        logger.info('=>' + new_line)
 
     def do_rename_file(self, name_pattern='{path}\\notes\{folder_name}_{title}.cson'):
 
@@ -61,9 +62,9 @@ class NoteUpdater(object):
                                'path': storage._path
                                })
             named_dict.update(note._data)
-            print(note.filename)
+            logger.info(note.filename)
             note.filename = name_pattern.format(**named_dict)
-            print(note.filename)
+            logger.info(note.filename)
 
     def find_inner_link(self):
         link_pattern = '\[([\w ]+)\]\(\:note\:([\w]+)\)'
@@ -74,6 +75,6 @@ class NoteUpdater(object):
             if len(matchs) > 0:
                 for idx, (link_name, cson) in enumerate(matchs):
                     if cson in storage.notes:
-                        print('%02d : %s ==> %s' % (idx, cson, storage.notes[cson]))
+                        logger.info('%02d : %s ==> %s' % (idx, cson, storage.notes[cson]))
                     else:
-                        print('%02d : %s ==> broken link' % (idx, cson))
+                        logger.info('%02d : %s ==> broken link' % (idx, cson))

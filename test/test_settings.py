@@ -5,7 +5,6 @@ import unittest
 
 class TestSettings(unittest.TestCase):
     def test_config(self):
-        from boostnote.settings import config
-
+        from boostnote.settings import config, logger
         self.assertEqual(config.get_config_name()[-13:], 'boostnote.ini')
-        self.assertEqual(config.logger, 'dd')
+        self.assertEqual(config.get_boostnote()['path'], [])

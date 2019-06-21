@@ -13,6 +13,7 @@ import yaml
 from boostnote.base import Boostnote, Storage
 from boostnote.note import NoteType, Note
 from boostnote.exporter.exporting_rules import AttachPathType
+from boostnote.settings import logger
 
 YAML_START = '---\n'
 YAML_END = '\n---\n'
@@ -124,7 +125,7 @@ def to_normal_md(s: Storage, n: Note, export_to_path,
             if not os.path.exists(os.path.dirname(link_target_path)):
                 os.mkdir(os.path.dirname(link_target_path))
             if not os.path.exists(link_source_path):
-                print(f'missing file {n.title}/{linkname}')
+                logger.info(f'missing file {n.title}/{linkname}')
             else:
                 copy2(link_source_path, link_target_path)
 

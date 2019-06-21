@@ -59,11 +59,11 @@ class BaseImpoter(object):
 
     def get_filename_from_arg(self, arg: dict) -> str:
         raise NotImplementedError()
+
     def get_tags_from_arg(self, arg: dict) -> list:
         raise NotImplementedError()
 
     def migrate(self, args: dict) -> str:
-        # print(args)
         return args['contents']
 
     def check_source_value(self, value):

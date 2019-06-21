@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
+import logging
 import os
 
 TOP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class ConfigMeta(type):
-    @property
-    def logger(cls):
-        return 'dd'
 
     @property
     def path(cls) -> list:
@@ -62,12 +60,28 @@ class ConfigSetting(object, metaclass=ConfigMeta):
                 except Exception as e:
                     break
 
-            rlt['export_path'] = cfg.get('boostnote', 'export_path', fallback=os.path.join(os.path.dirname(__file__), os.path.pardir, 'output'))
+            rlt['export_path'] = cfg.get('boostnote', 'export_path',
+                                         fallback=os.path.join(os.path.dirname(__file__), os.path.pardir, 'output'))
             if not os.path.exists(rlt['export_path']):
                 os.mkdir(rlt['export_path'])
 
             return rlt
         return rlt
 
+    @classmethod
+    def init_logger(cls):
+
+        logger = logging.getLogger('boostnote')
+        logger.setLevel(logging.INFO)
+        handler = logging.StreamHandler()
+        handler.setFormatter(logging.Formatter('%(levelname)-7s - %(filename)-20s:%(lineno)4d - %(message)s'))
+        logger.addHandler(handler)
+
+
+
 ConfigSetting.init_config_name()
 config = ConfigSetting
+
+config.init_logger()
+
+logger = logging.getLogger('boostnote')
